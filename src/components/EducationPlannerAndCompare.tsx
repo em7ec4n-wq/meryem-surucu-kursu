@@ -173,7 +173,7 @@ function PlannerAndCompareInner() {
                       id="ehliyet-sinifi-select"
                       value={selectedClass}
                       onChange={(e) => handleClassChange(e.target.value)}
-                      className="w-full min-h-[44px] appearance-none bg-[#F8FAFC] border border-[#DDDFE2]/80 rounded-[10px] pl-3.5 pr-10 text-[15px] font-semibold text-[#091B32] hover:bg-white focus:bg-white transition-colors cursor-pointer"
+                      className="custom-select w-full min-h-[44px] appearance-none bg-[#F8FAFC] border border-[#DDDFE2]/80 rounded-[10px] pl-3.5 pr-10 text-[15px] font-semibold text-[#091B32] hover:bg-white focus:bg-white transition-colors cursor-pointer"
                     >
                       <option value="">Seçiniz</option>
                       {publishedCatalog.map((item) => (
@@ -217,7 +217,7 @@ function PlannerAndCompareInner() {
                           e.target.value as TransmissionValue
                         )
                       }
-                      className="w-full min-h-[44px] appearance-none bg-[#F8FAFC] border border-[#DDDFE2]/80 rounded-[10px] pl-3.5 pr-10 text-[15px] font-semibold text-[#091B32] hover:bg-white focus:bg-white transition-colors cursor-pointer"
+                      className="custom-select w-full min-h-[44px] appearance-none bg-[#F8FAFC] border border-[#DDDFE2]/80 rounded-[10px] pl-3.5 pr-10 text-[15px] font-semibold text-[#091B32] hover:bg-white focus:bg-white transition-colors cursor-pointer"
                     >
                       <option value="">Seçiniz</option>
                       <option value="manuel">Manuel</option>
