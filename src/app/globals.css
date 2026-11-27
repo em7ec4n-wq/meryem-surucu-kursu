@@ -50,13 +50,27 @@ body {
   outline-offset: 2px;
 }
 
-/* Short red underline under section headings */
+/* Short red gradient underline under section headings */
 .heading-underline {
   display: block;
-  width: 44px;
-  height: 3px;
-  background-color: #cb1426;
+  width: 48px;
+  height: 3.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #cb1426 0%, #ef4444 100%);
   margin-top: 8px;
+}
+
+/* Modern subtle gradient surfaces */
+.bg-navy-gradient {
+  background: linear-gradient(135deg, #07192f 0%, #0a2340 54%, #123661 100%);
+}
+
+.bg-red-gradient {
+  background: linear-gradient(135deg, #d9162a 0%, #cb1426 55%, #a81020 100%);
+}
+
+.bg-red-gradient:hover {
+  background: linear-gradient(135deg, #cb1426 0%, #b01020 55%, #8f0c19 100%);
 }
 
 /* Diagonal slanted navy panel + red seam for Hero (Desktop) */

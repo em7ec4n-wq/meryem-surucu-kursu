@@ -158,6 +158,15 @@ export function HeroSlider() {
                   className="w-full h-full object-cover lg:hidden"
                   style={{ objectPosition: slide.objectPositionMobile }}
                 />
+                {/* Soft edge gradient blend */}
+                <div
+                  aria-hidden="true"
+                  className="hidden lg:block absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#07192F]/45 to-transparent pointer-events-none"
+                />
+                <div
+                  aria-hidden="true"
+                  className="lg:hidden absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#07192F]/35 to-transparent pointer-events-none"
+                />
                 {slide.isConcept && (
                   <span className="absolute top-3 right-3 lg:top-auto lg:bottom-4 lg:right-6 z-20 px-2.5 py-1 rounded-[6px] bg-black/55 text-white/95 text-[11px] font-medium backdrop-blur-[2px]">
                     Konsept görsel
@@ -168,21 +177,29 @@ export function HeroSlider() {
           })}
         </div>
 
-        {/* Mobile thin red line between photo and navy panel */}
+        {/* Mobile thin red gradient line between photo and navy panel */}
         <div
           aria-hidden="true"
-          className="h-[3px] w-full bg-[#CB1426] lg:hidden"
+          className="h-[3.5px] w-full bg-gradient-to-r from-[#CB1426] via-[#EF4444] to-[#A81020] lg:hidden"
         />
 
         {/* Desktop Red Diagonal Seam (sits 5px beyond the navy panel's diagonal right edge) */}
         <div
           aria-hidden="true"
-          className="hidden lg:block absolute inset-y-0 left-0 w-[calc(44%+5px)] bg-[#CB1426] hero-red-seam z-20 pointer-events-none"
+          className="hidden lg:block absolute inset-y-0 left-0 w-[calc(44%+5px)] bg-gradient-to-b from-[#E11D31] via-[#CB1426] to-[#9E0E1C] hero-red-seam z-20 pointer-events-none"
         />
 
         {/* Navy Text Panel */}
-        <div className="relative z-30 w-full lg:w-[44%] lg:h-full bg-[#0A2340] hero-navy-panel flex flex-col justify-between px-4 sm:px-6 pt-5 pb-4 lg:pt-14 lg:pb-10 lg:pl-[72px] xl:pl-[84px] lg:pr-14">
-          <div className="max-w-[450px] my-auto">
+        <div className="relative z-30 w-full lg:w-[44%] lg:h-full bg-navy-gradient hero-navy-panel flex flex-col justify-between px-4 sm:px-6 pt-5 pb-4 lg:pt-14 lg:pb-10 lg:pl-[72px] xl:pl-[84px] lg:pr-14 overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#1D4ED8]/15 blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-6 left-12 w-64 h-64 rounded-full bg-[#CB1426]/12 blur-3xl"
+          />
+          <div className="relative max-w-[450px] my-auto">
             <h1
               key={currentSlide.id}
               className="font-display font-extrabold italic uppercase text-white tracking-[-0.01em] text-[44px] sm:text-[48px] lg:text-[78px] xl:text-[88px] leading-[0.93] transition-opacity duration-[420ms]"
@@ -212,7 +229,7 @@ export function HeroSlider() {
             <div className="mt-4 lg:mt-6">
               <Link
                 href={currentSlide.ctaHref}
-                className="inline-flex items-center justify-center gap-2.5 min-h-[46px] lg:min-h-[50px] px-5 lg:px-6 bg-[#CB1426] hover:bg-[#A81020] text-white text-[15px] lg:text-[16px] font-semibold rounded-[10px] transition-colors shadow-[0_6px_18px_rgba(203,20,38,0.32)]"
+                className="inline-flex items-center justify-center gap-2.5 min-h-[46px] lg:min-h-[50px] px-5 lg:px-6 bg-red-gradient text-white text-[15px] lg:text-[16px] font-semibold rounded-[12px] transition-all shadow-[0_8px_22px_rgba(203,20,38,0.38)] hover:shadow-[0_10px_28px_rgba(203,20,38,0.5)] hover:-translate-y-0.5"
               >
                 <span>{currentSlide.ctaLabel}</span>
                 <Icon name="ok-sag" size={18} />

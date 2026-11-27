@@ -18,11 +18,15 @@ export function CtaBand({ trainingName }: CtaBandProps) {
   return (
     <section
       aria-label="Kayıt çağrısı"
-      className="w-full bg-[#0A2340] text-white"
+      className="relative overflow-hidden w-full bg-navy-gradient text-white"
     >
-      <div className="max-w-[1260px] mx-auto px-4 sm:px-5 lg:px-8 py-7 lg:py-6 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-8 text-center lg:text-left">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[#CB1426]/18 blur-3xl"
+      />
+      <div className="relative max-w-[1260px] mx-auto px-4 sm:px-5 lg:px-8 py-8 lg:py-7 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-8 text-center lg:text-left">
         <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-6">
-          <h2 className="font-display font-extrabold text-[28px] lg:text-[32px] leading-none uppercase tracking-tight shrink-0">
+          <h2 className="font-display font-extrabold text-[28px] lg:text-[34px] leading-none uppercase tracking-tight shrink-0">
             Kayıt bilgisi alın
           </h2>
           <span
@@ -40,7 +44,7 @@ export function CtaBand({ trainingName }: CtaBandProps) {
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 min-h-[46px] px-6 bg-[#CB1426] hover:bg-[#A81020] text-white text-[15px] font-semibold rounded-[10px] transition-colors"
+              className="inline-flex items-center justify-center gap-2.5 min-h-[48px] px-6 bg-red-gradient text-white text-[15px] font-semibold rounded-[12px] transition-all shadow-[0_8px_22px_rgba(203,20,38,0.38)] hover:-translate-y-0.5"
             >
               <Icon name="whatsapp" size={20} />
               <span>WhatsApp’tan bilgi al</span>
@@ -49,7 +53,7 @@ export function CtaBand({ trainingName }: CtaBandProps) {
           ) : (
             <Link
               href="/iletisim#kayit"
-              className="inline-flex items-center justify-center gap-2.5 min-h-[46px] px-6 bg-[#CB1426] hover:bg-[#A81020] text-white text-[15px] font-semibold rounded-[10px] transition-colors"
+              className="inline-flex items-center justify-center gap-2.5 min-h-[48px] px-6 bg-red-gradient text-white text-[15px] font-semibold rounded-[12px] transition-all shadow-[0_8px_22px_rgba(203,20,38,0.38)] hover:-translate-y-0.5"
             >
               <Icon name="whatsapp" size={20} />
               <span>WhatsApp’tan bilgi al</span>
