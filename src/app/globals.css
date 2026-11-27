@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --surface-white: #ffffff;
+  --surface-muted: #f8f8f8;
+  --brand-navy: #0a2340;
+  --brand-navy-dark: #07192f;
+  --text-dark: #091b32;
+  --text-muted: #4b5563;
+  --brand-red: #cb1426;
+  --brand-red-hover: #a81020;
+  --border-subtle: #dddfe2;
+  --whatsapp-green: #1ebe5d;
+  --whatsapp-green-hover: #17a34f;
+}
+
+@theme inline {
+  --color-navy: var(--brand-navy);
+  --color-navy-dark: var(--brand-navy-dark);
+  --color-ink: var(--text-dark);
+  --color-brand-red: var(--brand-red);
+  --color-brand-red-hover: var(--brand-red-hover);
+  --color-surface-muted: var(--surface-muted);
+  --color-line: var(--border-subtle);
+  --color-whatsapp: var(--whatsapp-green);
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-barlow-condensed), "Barlow Condensed", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #ffffff;
+  color: #091b32;
+}
+
+body {
+  background-color: #ffffff;
+  color: #091b32;
+  font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-barlow-condensed), "Barlow Condensed", sans-serif;
+}
+
+/* Visible accessible focus ring */
+:focus-visible {
+  outline: 2px solid #cb1426;
+  outline-offset: 2px;
+}
+
+/* Short red underline under section headings */
+.heading-underline {
+  display: block;
+  width: 44px;
+  height: 3px;
+  background-color: #cb1426;
+  margin-top: 8px;
+}
+
+/* Diagonal slanted navy panel + red seam for Hero (Desktop) */
+@media (min-width: 1024px) {
+  .hero-navy-panel {
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  }
+
+  .hero-red-seam {
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  }
+
+  .showcase-navy-panel {
+    clip-path: polygon(0 0, 100% 0, 87% 100%, 0 100%);
+  }
+}
+
+/* Splash intro animation (max 650ms) */
+@keyframes meryemSplashLogo {
+  0% {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+@keyframes meryemSplashBackdrop {
+  0% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.splash-logo-anim {
+  animation: meryemSplashLogo 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.splash-backdrop-anim {
+  animation: meryemSplashBackdrop 640ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .splash-logo-anim,
+  .splash-backdrop-anim {
+    animation: none !important;
+  }
+}
