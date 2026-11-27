@@ -72,7 +72,7 @@ export interface SiteConfig {
   faqs: FaqItem[];
 }
 
-export const SITE_URL = "https://meryemsurucukursu.onizlememerkezi.com";
+export const SITE_URL = "https://meryem-surucu-kursu.onizlememerkezi.com";
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   siteName: "Meryem Sürücü Kursu",
