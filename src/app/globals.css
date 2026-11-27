@@ -73,13 +73,6 @@ body {
   background: linear-gradient(135deg, #cb1426 0%, #b01020 55%, #8f0c19 100%);
 }
 
-select.custom-select {
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
-  background-image: none !important;
-}
-
 /* Diagonal slanted navy panel + red seam for Hero (Desktop) */
 @media (min-width: 1024px) {
   .hero-navy-panel {

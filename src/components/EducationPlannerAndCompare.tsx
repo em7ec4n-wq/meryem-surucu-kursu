@@ -1,9 +1,9 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Icon } from "./Icons";
+import { Icon, IconName } from "./Icons";
 import { useSiteConfig } from "@/lib/site-context";
 import {
   TRAINING_CARDS,
@@ -27,6 +27,192 @@ const COMPARE_CONTENT = {
       "Vites değiştirmeden kalkış, duruş ve trafik akışına odaklanırsın.",
   },
 } as const;
+
+interface SelectOption {
+  value: string;
+  label: string;
+  hint?: string;
+}
+
+interface ModernSelectProps {
+  id: string;
+  label: string;
+  icon: IconName;
+  iconTone: "navy" | "red";
+  badgeText?: string;
+  value: string;
+  placeholder?: string;
+  options: SelectOption[];
+  onChange: (val: string) => void;
+}
+
+function ModernSelect({
+  id,
+  label,
+  icon,
+  iconTone,
+  badgeText,
+  value,
+  placeholder = "Seçiniz",
+  options,
+  onChange,
+}: ModernSelectProps) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [open]);
+
+  const selectedOption = options.find((o) => o.value === value);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`relative p-3.5 rounded-[14px] bg-white border transition-all shadow-[0_2px_10px_rgba(9,27,50,0.03)] ${
+        open
+          ? "border-[#CB1426] ring-2 ring-[#CB1426]/15 z-30"
+          : "border-[#DDDFE2] hover:border-[#0A2340]/45 z-10"
+      }`}
+    >
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <label
+          id={`${id}-label`}
+          htmlFor={id}
+          className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-[#4B5563]"
+        >
+          <span
+            className={`w-6 h-6 rounded-[7px] flex items-center justify-center ${
+              iconTone === "red"
+                ? "bg-[#CB1426]/10 text-[#CB1426]"
+                : "bg-[#0A2340]/8 text-[#0A2340]"
+            }`}
+          >
+            <Icon name={icon} size={14} />
+          </span>
+          <span>{label}</span>
+        </label>
+        {badgeText && (
+          <span
+            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+              iconTone === "red"
+                ? "bg-[#CB1426]/10 text-[#CB1426]"
+                : "bg-[#0A2340]/8 text-[#0A2340]"
+            }`}
+          >
+            {badgeText}
+          </span>
+        )}
+      </div>
+
+      <button
+        id={id}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-labelledby={`${id}-label ${id}`}
+        onClick={() => setOpen((prev) => !prev)}
+        className="w-full min-h-[46px] px-3.5 rounded-[10px] bg-gradient-to-b from-[#F8FAFC] to-[#F3F6FA] hover:from-white hover:to-[#F8FAFC] border border-[#DDDFE2]/90 flex items-center justify-between gap-3 text-left transition-all cursor-pointer"
+      >
+        <span
+          className={`text-[15px] font-semibold truncate ${
+            selectedOption ? "text-[#091B32]" : "text-[#6B7280]"
+          }`}
+        >
+          {selectedOption ? selectedOption.label : placeholder}
+        </span>
+        <span className="w-7 h-7 rounded-full bg-white border border-[#DDDFE2]/80 flex items-center justify-center text-[#0A2340] shrink-0 shadow-2xs">
+          <Icon
+            name="chevron"
+            size={16}
+            className={`transition-transform duration-200 ${
+              open ? "rotate-180 text-[#CB1426]" : ""
+            }`}
+          />
+        </span>
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          aria-labelledby={`${id}-label`}
+          className="absolute left-0 right-0 top-[calc(100%+6px)] bg-white border border-[#DDDFE2] rounded-[12px] shadow-[0_14px_34px_rgba(9,27,50,0.14)] p-1.5 z-40 space-y-1"
+        >
+          <li role="option" aria-selected={value === ""}>
+            <button
+              type="button"
+              onClick={() => {
+                onChange("");
+                setOpen(false);
+              }}
+              className={`w-full min-h-[40px] px-3 rounded-[8px] flex items-center justify-between text-left text-[14px] transition-colors ${
+                value === ""
+                  ? "bg-[#F1F5F9] font-semibold text-[#091B32]"
+                  : "text-[#6B7280] hover:bg-[#F8FAFC]"
+              }`}
+            >
+              <span>{placeholder}</span>
+            </button>
+          </li>
+          {options.map((opt) => {
+            const isSelected = value === opt.value;
+            return (
+              <li key={opt.value} role="option" aria-selected={isSelected}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChange(opt.value);
+                    setOpen(false);
+                  }}
+                  className={`w-full min-h-[42px] px-3 py-2 rounded-[8px] flex items-center justify-between gap-2 text-left transition-colors ${
+                    isSelected
+                      ? "bg-[#0A2340] text-white font-semibold"
+                      : "text-[#091B32] hover:bg-[#F8FAFC] font-medium"
+                  }`}
+                >
+                  <div>
+                    <span className="block text-[14px] leading-tight">
+                      {opt.label}
+                    </span>
+                    {opt.hint && (
+                      <span
+                        className={`block text-[11px] mt-0.5 ${
+                          isSelected ? "text-white/75" : "text-[#6B7280]"
+                        }`}
+                      >
+                        {opt.hint}
+                      </span>
+                    )}
+                  </div>
+                  {isSelected && (
+                    <span className="w-2 h-2 rounded-full bg-[#CB1426] shrink-0" />
+                  )}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 function PlannerAndCompareInner() {
   const { config } = useSiteConfig();
@@ -146,93 +332,51 @@ function PlannerAndCompareInner() {
             </p>
           </div>
 
-          <div className="border border-[#DDDFE2] rounded-[18px] overflow-hidden bg-white grid grid-cols-1 lg:grid-cols-12 shadow-[0_14px_38px_rgba(9,27,50,0.07)]">
+          <div className="border border-[#DDDFE2] rounded-[18px] bg-white grid grid-cols-1 lg:grid-cols-12 shadow-[0_14px_38px_rgba(9,27,50,0.07)]">
             {/* Left 60% Modern Selection Cards Area */}
-            <div className="lg:col-span-7 p-4 sm:p-6 lg:p-7 bg-gradient-to-br from-[#F8FAFC] via-white to-[#F3F6FA] flex flex-col justify-center">
+            <div className="lg:col-span-7 p-4 sm:p-6 lg:p-7 rounded-t-[18px] lg:rounded-l-[18px] lg:rounded-tr-none bg-gradient-to-br from-[#F8FAFC] via-white to-[#F3F6FA] flex flex-col justify-center">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Ehliyet Sınıfı Selector Box */}
-                <div className="group p-3.5 rounded-[14px] bg-white border border-[#DDDFE2] shadow-[0_2px_10px_rgba(9,27,50,0.03)] hover:border-[#0A2340]/45 focus-within:border-[#CB1426] focus-within:ring-2 focus-within:ring-[#CB1426]/15 transition-all">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <label
-                      htmlFor="ehliyet-sinifi-select"
-                      className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-[#4B5563]"
-                    >
-                      <span className="w-6 h-6 rounded-[7px] bg-[#0A2340]/8 text-[#0A2340] flex items-center justify-center">
-                        <Icon name="belge" size={14} />
-                      </span>
-                      <span>Ehliyet sınıfı</span>
-                    </label>
-                    {selectedClass && (
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#0A2340]/8 text-[#0A2340]">
-                        Seçili
-                      </span>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <select
-                      id="ehliyet-sinifi-select"
-                      value={selectedClass}
-                      onChange={(e) => handleClassChange(e.target.value)}
-                      className="custom-select w-full min-h-[44px] appearance-none bg-[#F8FAFC] border border-[#DDDFE2]/80 rounded-[10px] pl-3.5 pr-10 text-[15px] font-semibold text-[#091B32] hover:bg-white focus:bg-white transition-colors cursor-pointer"
-                    >
-                      <option value="">Seçiniz</option>
-                      {publishedCatalog.map((item) => (
-                        <option key={item.id} value={item.licenseClass}>
-                          {item.licenseLabel}
-                        </option>
-                      ))}
-                    </select>
-                    <Icon
-                      name="chevron"
-                      size={18}
-                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#0A2340]"
-                    />
-                  </div>
-                </div>
+                <ModernSelect
+                  id="ehliyet-sinifi-select"
+                  label="Ehliyet sınıfı"
+                  icon="belge"
+                  iconTone="navy"
+                  badgeText={selectedClass ? "Seçili" : undefined}
+                  value={selectedClass}
+                  options={publishedCatalog.map((item) => ({
+                    value: item.licenseClass,
+                    label: `${item.licenseLabel} sınıfı`,
+                    hint: "Otomobil sürücü belgesi",
+                  }))}
+                  onChange={(val) => handleClassChange(val)}
+                />
 
-                {/* Vites Tercihi Selector Box */}
-                <div className="group p-3.5 rounded-[14px] bg-white border border-[#DDDFE2] shadow-[0_2px_10px_rgba(9,27,50,0.03)] hover:border-[#0A2340]/45 focus-within:border-[#CB1426] focus-within:ring-2 focus-within:ring-[#CB1426]/15 transition-all">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <label
-                      htmlFor="vites-tercihi-select"
-                      className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-[#4B5563]"
-                    >
-                      <span className="w-6 h-6 rounded-[7px] bg-[#CB1426]/10 text-[#CB1426] flex items-center justify-center">
-                        <Icon name="direksiyon" size={14} />
-                      </span>
-                      <span>Vites tercihi</span>
-                    </label>
-                    {selectedTransmission && (
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#CB1426]/10 text-[#CB1426]">
-                        {transmissionDisplay}
-                      </span>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <select
-                      id="vites-tercihi-select"
-                      value={selectedTransmission}
-                      onChange={(e) =>
-                        handleTransmissionChange(
-                          e.target.value as TransmissionValue
-                        )
-                      }
-                      className="custom-select w-full min-h-[44px] appearance-none bg-[#F8FAFC] border border-[#DDDFE2]/80 rounded-[10px] pl-3.5 pr-10 text-[15px] font-semibold text-[#091B32] hover:bg-white focus:bg-white transition-colors cursor-pointer"
-                    >
-                      <option value="">Seçiniz</option>
-                      <option value="manuel">Manuel</option>
-                      <option value="otomatik">Otomatik</option>
-                    </select>
-                    <Icon
-                      name="chevron"
-                      size={18}
-                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#0A2340]"
-                    />
-                  </div>
-                </div>
+                <ModernSelect
+                  id="vites-tercihi-select"
+                  label="Vites tercihi"
+                  icon="direksiyon"
+                  iconTone="red"
+                  badgeText={transmissionDisplay || undefined}
+                  value={selectedTransmission}
+                  options={[
+                    {
+                      value: "manuel",
+                      label: "Manuel",
+                      hint: "Debriyaj ve vites pratiği",
+                    },
+                    {
+                      value: "otomatik",
+                      label: "Otomatik",
+                      hint: "Akıcı trafik odaklanma",
+                    },
+                  ]}
+                  onChange={(val) =>
+                    handleTransmissionChange(val as TransmissionValue)
+                  }
+                />
               </div>
 
-              {/* Quick Interactive Pill Chips synced with select */}
+              {/* Quick Interactive Pill Chips */}
               <div className="mt-4 pt-3.5 border-t border-[#DDDFE2]/70 flex flex-wrap items-center justify-between gap-2.5">
                 <span className="text-[12px] font-medium text-[#4B5563]">
                   Hızlı vites seçimi:
@@ -246,9 +390,9 @@ function PlannerAndCompareInner() {
                         type="button"
                         onClick={() => handleTransmissionChange(v)}
                         aria-pressed={active}
-                        className={`min-h-[36px] px-3.5 rounded-full text-[13px] font-semibold border transition-all ${
+                        className={`min-h-[38px] px-4 rounded-full text-[13px] font-semibold border transition-all cursor-pointer ${
                           active
-                            ? "bg-[#0A2340] border-[#0A2340] text-white shadow-[0_4px_12px_rgba(10,35,64,0.2)]"
+                            ? "bg-[#0A2340] border-[#0A2340] text-white shadow-[0_4px_12px_rgba(10,35,64,0.22)]"
                             : "bg-white border-[#DDDFE2] text-[#091B32] hover:border-[#0A2340]"
                         }`}
                       >
@@ -263,7 +407,7 @@ function PlannerAndCompareInner() {
             {/* Right 40% Gradient Navy Result Panel */}
             <div
               aria-live="polite"
-              className="relative overflow-hidden lg:col-span-5 bg-navy-gradient text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between gap-5"
+              className="relative overflow-hidden lg:col-span-5 rounded-b-[18px] lg:rounded-r-[18px] lg:rounded-bl-none bg-navy-gradient text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-between gap-5"
             >
               <div
                 aria-hidden="true"
@@ -440,7 +584,7 @@ function PlannerAndCompareInner() {
                       aria-controls={`panel-${tabKey}`}
                       tabIndex={isActive ? 0 : -1}
                       onClick={() => handleUserCompareTabChange(tabKey)}
-                      className={`min-h-[46px] rounded-[10px] text-[15px] font-semibold transition-all flex items-center justify-center gap-2 ${
+                      className={`min-h-[46px] rounded-[10px] text-[15px] font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                         isActive
                           ? "bg-red-gradient text-white shadow-[0_6px_16px_rgba(203,20,38,0.28)]"
                           : "bg-transparent text-[#091B32] hover:bg-white/80"
